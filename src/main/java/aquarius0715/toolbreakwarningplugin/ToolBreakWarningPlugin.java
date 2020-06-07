@@ -7,7 +7,10 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 
 public final class ToolBreakWarningPlugin extends JavaPlugin {
@@ -16,6 +19,9 @@ public final class ToolBreakWarningPlugin extends JavaPlugin {
     Map<UUID, Boolean> stopper_stats = new HashMap<UUID, Boolean>();
     Map<UUID, Integer> allBlocks = new HashMap<UUID, Integer>();
     Map<UUID, Boolean> scoreboard_stats = new HashMap<UUID, Boolean>();
+    Map<UUID, String> rank = new HashMap<UUID, String>();
+    Map<UUID, Integer> remainRank = new HashMap<UUID, Integer>();
+    Map<UUID, Integer> hourMinedBlocks = new HashMap<UUID, Integer>();
 
     ScoreboardManager scoreboardManager;
     Scoreboard scoreboard;
@@ -23,20 +29,23 @@ public final class ToolBreakWarningPlugin extends JavaPlugin {
     Team blocks;
     Team noticeStats;
     Team stopperStats;
+    Team ranks;
+    Team nextRank;
+    Team achieveInt;
+    Team hourminedBlocks;
 
     ScoreBoard ScoreBoard = new ScoreBoard(this);
     SoundData SoundData = new SoundData(this);
     Statistic statistic = new Statistic(this);
+    RankData rankData = new RankData(this);
 
     String sound_config;
 
     int allBrockIn = 0;
 
-    Random random = new Random();
-
 
     String prefix = ChatColor.BOLD + "[" + ChatColor.GREEN + "ToolBreakWarning" + ChatColor.WHITE + "" + ChatColor.BOLD + "] ";
-    boolean plugin_stats = false;
+    boolean plugin_stats;
 
     @Override
     public void onEnable() {
@@ -47,7 +56,7 @@ public final class ToolBreakWarningPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new Event(this), this);
         Objects.requireNonNull(getCommand("tbw")).setExecutor(new Command(this));
 
-        plugin_stats = true;
+        plugin_stats = this.getConfig().getBoolean("plugin_stats");
         // Plugin startup logic
     }
 

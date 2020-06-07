@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
@@ -26,9 +27,13 @@ public class Event implements Listener {
     public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
         Player player = event.getPlayer();
 
-        plugin.notice_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
-        plugin.stopper_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
-        plugin.scoreboard_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+        if (!plugin.notice_stats.containsKey(player.getUniqueId())) {
+            plugin.notice_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+            plugin.stopper_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+            plugin.scoreboard_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+            plugin.hourMinedBlocks.putIfAbsent(event.getPlayer().getUniqueId(), 0);
+            plugin.ScoreBoard.updateScoreBoardDamageEvent(player, event);
+        }
 
         int maxDurability = event.getItem().getType().getMaxDurability();
         int nowDurability = (event.getItem().getType().getMaxDurability() - event.getItem().getDurability()) - 1;
@@ -72,15 +77,19 @@ public class Event implements Listener {
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
 
-        plugin.notice_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
-        plugin.stopper_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
-        plugin.scoreboard_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+        if (!plugin.notice_stats.containsKey(event.getPlayer().getUniqueId())) {
+            plugin.notice_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+            plugin.stopper_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+            plugin.scoreboard_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+            plugin.hourMinedBlocks.putIfAbsent(event.getPlayer().getUniqueId(), 0);
+            plugin.ScoreBoard.updateScoreBoard(event.getPlayer(), event);
+        }
 
         Player player = event.getPlayer();
 
-        plugin.ScoreBoard.updateBlocks(event.getPlayer());
-
         boolean contains = plugin.stopper_stats.containsKey(player.getUniqueId());
+
+        plugin.hourMinedBlocks.put(event.getPlayer().getUniqueId(), plugin.hourMinedBlocks.get(event.getPlayer().getUniqueId()) + 1);
 
         if (!plugin.plugin_stats || !contains) {
             event.isCancelled();
@@ -109,11 +118,15 @@ public class Event implements Listener {
             plugin.notice_stats.putIfAbsent(player.getUniqueId(), true);
             plugin.stopper_stats.putIfAbsent(player.getUniqueId(), true);
             plugin.scoreboard_stats.putIfAbsent(player.getUniqueId(), true);
-            plugin.statistic.getStatistic(event.getPlayer());
-            plugin.ScoreBoard.createScoreBoard(event.getPlayer());
-            plugin.ScoreBoard.updateNoticeStats(event.getPlayer());
-            plugin.ScoreBoard.updateStopperStats(event.getPlayer());
+            plugin.hourMinedBlocks.putIfAbsent(player.getUniqueId(), 0);
+            plugin.ScoreBoard.updateScoreBoardJoinEvent(player, event);
 
         }
+    }
+
+    @EventHandler
+    public void onPlayerQuitEvent(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        plugin.scoreboard_stats.putIfAbsent(player.getUniqueId(), false);
     }
 }

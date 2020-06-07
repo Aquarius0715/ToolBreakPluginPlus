@@ -1,1 +1,20 @@
+##########################
+# ToolBreakWarningPlugin #
+##########################
+
+
+plugin_stats: true
+#plugin_stats: trueまたはfalseを入れて下さい。
+#              trueはデフォルトの状態でプラグインが有効化。
+#              falseではデフォルトの状態でプラグインが無効化。
+
+
 sound: BLOCK_BEACON_ACTIVATE
+#sound: ツールが壊れる前に鳴る音を指定します。
+#       音の正式名称を入れてください。
+#       詳しくはhttps://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.htmlで確認してください。
+
+
+update_speed: 10
+#update_speed: スコアボードを更新する間隔を指定します。
+#              Tickで指定します。 20ticks = 1秒

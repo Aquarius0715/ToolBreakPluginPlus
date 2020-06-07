@@ -28,9 +28,10 @@ public class Command implements CommandExecutor {
                 sender.sendMessage(plugin.prefix + "壊れそうになると音で知らせてくれるプラグインです。");
                 sender.sendMessage(plugin.prefix + "デフォルトではonになっています。");
                 sender.sendMessage(plugin.prefix + "</tbw>: この説明画面を開きます。");
-                sender.sendMessage(plugin.prefix + "</tb stopper>: ストッパー機能の有効・無効を指定します。");
+                sender.sendMessage(plugin.prefix + "</tbw stopper>: ストッパー機能の有効・無効を切り替えます。");
                 sender.sendMessage(plugin.prefix + "</tbw on>: このプラグインを使用します。");
                 sender.sendMessage(plugin.prefix + "</tbw off>: このプラグインの使用をやめます。");
+                sender.sendMessage(plugin.prefix + "<tbw scoreboard> スコアボードの表示・非表示を切り替えます。");
                 if (sender.hasPermission("admin")) {
                     sender.sendMessage(plugin.prefix + "</tbw enable>: このプラグインを有効化にします。");
                     sender.sendMessage(plugin.prefix + "</tbw disable>: このプラグインを無効化します。");
@@ -93,7 +94,7 @@ public class Command implements CommandExecutor {
                 }
 
                 if (args[0].equalsIgnoreCase("stopper")) {
-                    if (this.plugin.stopper_stats.containsValue(true)) {
+                    if (plugin.stopper_stats.containsValue(true)) {
                         sender.sendMessage(plugin.prefix + "ストッパー機能をオフにしました。");
                         this.plugin.stopper_stats.put(((Player) sender).getUniqueId(), false);
                         plugin.ScoreBoard.updateStopperStats(player);
@@ -117,17 +118,12 @@ public class Command implements CommandExecutor {
                 }
 
                 if (args[0].equalsIgnoreCase("scoreboard")) {
-                    if (!sender.hasPermission("admin")) {
-                        sender.sendMessage(plugin.prefix + "あなたはこのコマンドを使うことができません。");
-                        return false;
+                    if (plugin.scoreboard_stats.containsValue(true)) {
+                        sender.sendMessage(plugin.prefix + "スコアボードを" + ChatColor.RED + "" + ChatColor.BOLD + "無効" + ChatColor.WHITE + "" + ChatColor.BOLD + "にしました。");
+                        plugin.scoreboard_stats.put(((Player) sender).getUniqueId(), false);
                     } else {
-                        if (this.plugin.scoreboard_stats.containsValue(false)) {
-                            sender.sendMessage(plugin.prefix + "スコアボードの更新方法を" + ChatColor.GREEN + "" + ChatColor.BOLD + "軽量" + ChatColor.WHITE + "" + ChatColor.BOLD + "にしました。");
-                            this.plugin.scoreboard_stats.put(((Player) sender).getUniqueId(), true);
-                        } else {
-                            sender.sendMessage(plugin.prefix + "スコアボードの更新方法を" + ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "通常" + ChatColor.WHITE + "" + ChatColor.BOLD + "にしました。");
-                            this.plugin.scoreboard_stats.put(((Player) sender).getUniqueId(), false);
-                        }
+                        sender.sendMessage(plugin.prefix + "スコアボードを" + ChatColor.GREEN + "" + ChatColor.BOLD + "有効" + ChatColor.WHITE + "" + ChatColor.BOLD + "にしました。");
+                        plugin.scoreboard_stats.put(((Player) sender).getUniqueId(), true);
                     }
                     return true;
                 }
