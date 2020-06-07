@@ -10,11 +10,12 @@ import org.bukkit.scoreboard.Team;
 import java.util.*;
 
 
-public final class ToolBreakWarningPlugin<statzAPI> extends JavaPlugin {
+public final class ToolBreakWarningPlugin extends JavaPlugin {
 
     Map<UUID, Boolean> notice_stats = new HashMap<UUID, Boolean>();
     Map<UUID, Boolean> stopper_stats = new HashMap<UUID, Boolean>();
     Map<UUID, Integer> allBlocks = new HashMap<UUID, Integer>();
+    Map<UUID, Boolean> scoreboard_stats = new HashMap<UUID, Boolean>();
 
     ScoreboardManager scoreboardManager;
     Scoreboard scoreboard;
@@ -41,7 +42,6 @@ public final class ToolBreakWarningPlugin<statzAPI> extends JavaPlugin {
     public void onEnable() {
 
         this.saveDefaultConfig();
-
         sound_config = this.getConfig().getString("sound");
 
         this.getServer().getPluginManager().registerEvents(new Event(this), this);

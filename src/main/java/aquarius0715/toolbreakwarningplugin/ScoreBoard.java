@@ -3,6 +3,7 @@ package aquarius0715.toolbreakwarningplugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 
 import java.util.Objects;
@@ -74,5 +75,16 @@ public class ScoreBoard {
         } else
             plugin.stopperStats.setSuffix(ChatColor.RED + "" + ChatColor.BOLD + "無効");
         player.setScoreboard(plugin.scoreboard);
+    }
+
+    public void autoUpdateScoreBoard(Player player) {
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                updateBlocks(player);
+            }
+        }.runTaskTimer(plugin, 0, 20);
+
     }
 }

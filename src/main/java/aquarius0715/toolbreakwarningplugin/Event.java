@@ -25,6 +25,11 @@ public class Event implements Listener {
     @EventHandler
     public void onPlayerItemDamageEvent(PlayerItemDamageEvent event) {
         Player player = event.getPlayer();
+
+        plugin.notice_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+        plugin.stopper_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+        plugin.scoreboard_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+
         int maxDurability = event.getItem().getType().getMaxDurability();
         int nowDurability = (event.getItem().getType().getMaxDurability() - event.getItem().getDurability()) - 1;
 
@@ -66,6 +71,11 @@ public class Event implements Listener {
 
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
+
+        plugin.notice_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+        plugin.stopper_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+        plugin.scoreboard_stats.putIfAbsent(event.getPlayer().getUniqueId(), true);
+
         Player player = event.getPlayer();
 
         plugin.ScoreBoard.updateBlocks(event.getPlayer());
@@ -98,6 +108,7 @@ public class Event implements Listener {
 
             plugin.notice_stats.putIfAbsent(player.getUniqueId(), true);
             plugin.stopper_stats.putIfAbsent(player.getUniqueId(), true);
+            plugin.scoreboard_stats.putIfAbsent(player.getUniqueId(), true);
             plugin.statistic.getStatistic(event.getPlayer());
             plugin.ScoreBoard.createScoreBoard(event.getPlayer());
             plugin.ScoreBoard.updateNoticeStats(event.getPlayer());

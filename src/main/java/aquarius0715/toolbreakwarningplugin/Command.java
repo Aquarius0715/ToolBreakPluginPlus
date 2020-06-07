@@ -115,6 +115,22 @@ public class Command implements CommandExecutor {
                     }
                     return true;
                 }
+
+                if (args[0].equalsIgnoreCase("scoreboard")) {
+                    if (!sender.hasPermission("admin")) {
+                        sender.sendMessage(plugin.prefix + "あなたはこのコマンドを使うことができません。");
+                        return false;
+                    } else {
+                        if (this.plugin.scoreboard_stats.containsValue(false)) {
+                            sender.sendMessage(plugin.prefix + "スコアボードの更新方法を" + ChatColor.GREEN + "" + ChatColor.BOLD + "軽量" + ChatColor.WHITE + "" + ChatColor.BOLD + "にしました。");
+                            this.plugin.scoreboard_stats.put(((Player) sender).getUniqueId(), true);
+                        } else {
+                            sender.sendMessage(plugin.prefix + "スコアボードの更新方法を" + ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "通常" + ChatColor.WHITE + "" + ChatColor.BOLD + "にしました。");
+                            this.plugin.scoreboard_stats.put(((Player) sender).getUniqueId(), false);
+                        }
+                    }
+                    return true;
+                }
             }
             return false;
         }
